@@ -66,12 +66,14 @@ class BayesClassifier:
       for label, label_words in self.word_counts.items():
          
          # Calculate label probability
-         probs[label] = float(self.docs[label])/float(self.total_docs) # Start off with p(label)
+         probs[label] = math.log(float(self.docs[label])/float(self.total_docs)) # Start off with p(label)
 
          # Calculate probability for each word
          for word in words:
             if word in self.word_counts[label]:
-               probs[label] *= float(self.word_counts[label][word]) / float(self.word_sums[label])
+               probs[label] += math.log(float(self.word_counts[label][word]) / float(self.word_sums[label]))
+            else:
+               probs[label] += math.log(.05)
 
       # Now find the maximum probability
       prob_label, prob_number = "NONE", -1000
@@ -81,6 +83,7 @@ class BayesClassifier:
 
             prob_label, prob_number = key, value
 
+      print probs
 
       return prob_label, prob_number
 
