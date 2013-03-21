@@ -41,6 +41,11 @@ class BayesClassifier:
             label, data = dr.next()
 
          except StopIteration:
+            # Calculate the total number of words / label
+            for label, label_words in self.word_counts.items():
+               self.word_sums[label] = 0
+               for word, word_count in label_words.items():
+                  self.word_sums[label] += word_count                     
 
             self.save(dataFile+".pickle")
             return
@@ -54,11 +59,6 @@ class BayesClassifier:
       words = tokenize(sText)
       probs = {}
 
-      # Calculate the total number of words / label
-      for label, label_words in self.word_counts.items():
-         self.word_sums[label] = 0
-         for word, word_count in label_words.items():
-            self.word_sums[label] += word_count                     
 
 
       # Calculate probability for each label
@@ -91,6 +91,7 @@ class BayesClassifier:
       # use dump to dump your variables
       p.dump(self.word_counts)
       p.dump(self.docs)
+      p.dump(self.word_sums)
       p.dump(self.total_docs)
       f.close()
    
@@ -102,5 +103,6 @@ class BayesClassifier:
       # use load to load in previously dumped variables
       self.word_counts = u.load()
       self.docs = u.load()
+      self.word_sums = u.load()
       self.total_docs = u.load()
       f.close()
