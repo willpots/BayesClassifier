@@ -52,13 +52,20 @@ class BayesClassifier:
       '''
       words = tokenize(sText)
 
-      p_pos = float(n_pos) / float(n_pos + n_neg)
-      p_neg = float(n_neg) / float(n_pos + n_neg)
+      p_pos = float(self.n_pos) / float(self.n_pos + self.n_neg)
+      p_neg = float(self.n_neg) / float(self.n_pos + self.n_neg)
+
       for i in range(len(words)):
-         if words[i] in wc_pos:
-            p_pos *= float(wc_pos[words[i]]) / float(n_pos)
-         if words[i] in wc_neg:
-            p_neg *= float(wc_neg[words[i]]) / float(n_neg)
+         if words[i] in self.wc_pos:
+            p_pos *= float(self.wc_pos[words[i]]) / float(self.n_pos)
+
+         if words[i] in self.wc_neg:
+            p_neg *= float(self.wc_neg[words[i]]) / float(self.n_neg)
+            
+      if p_pos >= p_neg:
+         return "positive: "+str(p_pos)+" vs. "+str(p_neg)
+      else:
+         return "negative: "+str(p_neg)+" vs. "+str(p_pos)
 
 
    def save(self, sFilename):
