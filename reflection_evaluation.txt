@@ -1,0 +1,5 @@
+Assignment 4
+Will Potter and Parker Woodworth
+
+1. We choose to ignore words that have not been seen before for several reasons.  Perhaps the most significant is that it is difficult to predict the probability of a word appearing in a positive or negative context if it did not appear in the training data. Without this prior data, the assignment of a probability would be largely arbitrary.  It would be conceivable to continue to "learn" previously undiscovered words as the classifier ran, but that would require relying on the labels the classifier applies instead of using prelabeled data to learn against. This could ultimately lead to generation of increasing incidents of incorrect probablities and therefore increasing incidents of incorrect labels.  Therefore, the safest route is to ignore words that have not previously been discovered in mechanically classified data; the best way to increase the classifiers "vocabulary" is to use a larger labeled data set to learn against.
+
