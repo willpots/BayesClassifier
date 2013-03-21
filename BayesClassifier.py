@@ -1,6 +1,6 @@
-# Name: 
-# Date:
-# Description:
+# Name: Parker Woodworth and Will Potter 
+# Date: 03/21/2013
+# Description: Our awesome BayesClassifier
 #
 #
 
@@ -11,11 +11,10 @@ class BayesClassifier:
 
    def __init__(self):
       '''This method initializes the Naive Bayes classifier'''
-      self.wc_neg = {}
-      self.wc_pos = {}
-      self.n_pos = 0
-      self.n_neg = 0
-
+      self.word_counts = {} # Dictionary of dictionaries. Label as first key, word as second key
+      self.docs = {} # Label is the key. Total docs / label
+      self.word_sums = {} # Label is the key. Total # of words / label
+      self.total_docs = 0
 
    def train(self, dataFile):   
       '''Trains the Naive Bayes Sentiment Classifier.'''
@@ -24,23 +23,30 @@ class BayesClassifier:
       label, data = dr.next()
       while(label):
          try:
-            if label == "positive":
-               self.n_pos += 1
-            elif label == "negative":
-               self.n_neg += 1
+            if label not in self.word_counts:
+               self.word_counts[label] = {}
+
+            if label in self.docs:
+               self.docs[label] += 1
+            else:     
+               self.docs[label] = 1
+            self.total_docs += 1   
+
             for i in range(len(data)):
-               if label == "positive":
-                  if data[i] in self.wc_pos:
-                     self.wc_pos[data[i]] += 1
-                  else:
-                     self.wc_pos[data[i]] = 1
-               elif label == "negative":
-                  if data[i] in self.wc_neg:
-                     self.wc_neg[data[i]] += 1
-                  else:
-                     self.wc_neg[data[i]] = 1
+               if data[i] in self.word_counts[label]:
+                  self.word_counts[label][data[i]] += 1
+               else:
+                  self.word_counts[label][data[i]] = 1
+
             label, data = dr.next()
+
          except StopIteration:
+            # Calculate the total number of words / label
+            for label_l, label_words_w in self.word_counts.items():
+               self.word_sums[label_l] = 0
+               for word, word_count in label_words_w.items():
+                  self.word_sums[label_l] += word_count                     
+
             self.save(dataFile+".pickle")
             return
 
@@ -51,21 +57,28 @@ class BayesClassifier:
       class to which the target string belongs (i.e., positive or negative ).
       '''
       words = tokenize(sText)
+      probs = {}
 
-      p_pos = float(self.n_pos) / float(self.n_pos + self.n_neg)
-      p_neg = float(self.n_neg) / float(self.n_pos + self.n_neg)
+      # Calculate probability for each label
+      for label, label_words in self.word_counts.items():
+         
+         # Calculate label probability
+         probs[label] = float(self.docs[label])/float(self.total_docs) # Start off with p(label)
 
-      for i in range(len(words)):
-         if words[i] in self.wc_pos:
-            p_pos *= float(self.wc_pos[words[i]]) / float(self.n_pos)
+         # Calculate probability for each word
+         for word in words:
+            if word in self.word_counts[label]:
+               probs[label] *= float(self.word_counts[label][word]) / float(self.word_sums[label])
 
-         if words[i] in self.wc_neg:
-            p_neg *= float(self.wc_neg[words[i]]) / float(self.n_neg)
-            
-      if p_pos >= p_neg:
-         return "positive: "+str(p_pos)+" vs. "+str(p_neg)
-      else:
-         return "negative: "+str(p_neg)+" vs. "+str(p_pos)
+      # Now find the maximum probability
+      prob_label, prob_number = "NONE", -1000
+
+      for key, value in probs.items():
+         if probs[key] > prob_number:
+            prob_label, prob_number = key, value
+
+
+      return key, value
 
 
    def save(self, sFilename):
@@ -74,10 +87,10 @@ class BayesClassifier:
       f = open(sFilename, "w")
       p = pickle.Pickler(f)
       # use dump to dump your variables
-      p.dump(self.wc_pos)
-      p.dump(self.wc_neg)
-      p.dump(self.n_pos)
-      p.dump(self.n_neg)
+      p.dump(self.word_counts)
+      p.dump(self.docs)
+      p.dump(self.word_sums)
+      p.dump(self.total_docs)
       f.close()
    
    def load(self, sFilename):
@@ -86,8 +99,8 @@ class BayesClassifier:
       f = open(sFilename, "r")
       u = pickle.Unpickler(f)
       # use load to load in previously dumped variables
-      self.wc_pos = u.load()
-      self.wc_neg = u.load()
-      self.n_pos = u.load()
-      self.n_neg = u.load()
+      self.word_counts = u.load()
+      self.docs = u.load()
+      self.word_sums = u.load()
+      self.total_docs = u.load()
       f.close()
