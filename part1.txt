@@ -1,0 +1,41 @@
+Will Potter
+Part 2
+HW 4
+CS311
+
+2.
+p( positive) = .5
+p( negative) = .5
+p( I | positive ) = 1
+p( hated | positive ) = .333333 
+p( that | positive ) = .6666667
+p( movie | positive ) = .333333
+p( loved | positive ) = 1
+p( it | positive ) = .6666667
+p( I | negative ) = 1
+p( hated | negative ) = 1
+p( that | negative ) = .6666667
+p( movie | negative ) = .333333
+p( loved | negative ) = .333333
+p( it | negative ) = .6666667
+
+
+
+3. 
+I loved it
+P(positive)*P(I | positive)*P( loved | positive) * P( it | positive)
+
+P(positive | I,loved,it) 	
+
+= 0.5 * 1 * 1 * 0.666667
+= 0.333333
+
+
+
+I thought I hated it but loved it
+
+P(positive | I,thought,I,hated,it,but,loved,it)
+P(positive)*P(I | positive)* P( hated | positive)* P( it | positive)*P( loved | positive)
+
+= 0.5 * 1 * 0.333333 * .6666667 * 1
+= 0.1111111
