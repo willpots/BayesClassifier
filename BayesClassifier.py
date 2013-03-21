@@ -1,4 +1,4 @@
-# Name: Parker Woodworth and Will Potter 
+# Name: Parker Woodworth and Will Potter
 # Date: 03/21/2013
 # Description: Our awesome BayesClassifier
 #
@@ -6,6 +6,7 @@
 
 import math, os, pickle
 from DataReader import *
+
 
 class BayesClassifier:
 
@@ -76,11 +77,12 @@ class BayesClassifier:
       prob_label, prob_number = "NONE", -1000
 
       for key, value in probs.items():
-         if probs[key] > prob_number:
+         if value > prob_number:
+
             prob_label, prob_number = key, value
 
 
-      return key, value
+      return prob_label, prob_number
 
 
    def save(self, sFilename):
