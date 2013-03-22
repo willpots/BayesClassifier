@@ -1,0 +1,42 @@
+4. Our vanilla classifier had an accuracy rate of roughly 48% with movie reviews, while it had an accuracy rate of approximately 79% with our improved algorithm that accounted for bigram sequences and capitalized words. The precision for positive reviews was much better on our improved classifier, while the precision for negative reviews was much better with the vanilla classifier. Our improved classifier was much better with positive reviews, and there were more positive reviews in the dataset, thereby bringing up the overall accuracy rate to around %80.
+
+Movie Reviews Results
+
+ACCURACY
+			| Vanilla 			| Improved
+Dataset 1	| 0.475216365067	| 0.801730920535
+Dataset 2	| 0.481455064194	| 0.789586305278
+
+PRECISION
+
+Dataset 1	| Vanilla				| Improved
+positive 	| 0.38640776699			| 0.900970873786
+negative 	| 0.854771784232		| 0.377593360996
+
+Dataset 2	| Vanilla				| Improved
+positive 	| 0.386809269162		| 0.894830659537
+negative 	| 0.860714285714		| 0.367857142857
+
+When we analyzed UseNet reviews, we were able to find a higher rate of accuracy and precision for all categories with our improved classifier (roughly 95%). Because we implemented bigrams, it would appear that the data is tailored to small phrases as opposed to individual words. However, our vanilla classifier performed worse, most likely indicating a higher level of complexity within the UseNet groups' data.
+
+Auto Aviation Results
+ACCURACY
+			| Vanilla 			| Improved
+Dataset 1	| 0.422121586387	| 0.948401262522
+
+PRECISION
+Dataset 1	| Vanilla 			| Improved
+auto 		| 0.353812636166	| 0.968409586057
+aviation 	| 0.538375973304	| 0.914349276974
+
+Real Simulation Results
+ACCURACY
+			| Vanilla 			| Improved
+Dataset 1	| 0.420915570175 | 0.952987938596
+
+PRECISION
+Dataset 1	| Vanilla 			| Improved
+real 		| 0.650298301973	| 0.908673703534
+simulation 	| 0.323236271253	| 0.971858510846
+
+

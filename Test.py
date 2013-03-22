@@ -1,8 +1,8 @@
 
 # 1. Call this line to resplit data
 # Should resplit fairly often.
-# from BayesClassifierBest import *
-# split("data/movies.data", "data/movies_test")
+# from BayesClassifier import *
+# split("data/sraa.real_sim.data", "data/rs")
 
 # 2. Test 5 specific phrases (This is what he is looking for in Writeup number 2) 
 # from BayesClassifierBest import *
@@ -20,10 +20,10 @@
 
 # 3. Use these four lines to test classifier on a large subset of data. Output will be logged to ouputFile.txt
 # This gives us our accuracy rate.
-from BayesClassifierBest import *
+from BayesClassifier import *
 c = BayesClassifier()
-c.train("data/movies_test.train")
-print c.test("data/movies_test.test", "outputFile.txt")
+c.train("data/20.train")
+print c.test("data/20.test", "outputFile.txt")
 
 
 

@@ -8,14 +8,14 @@ import math, os, pickle
 from DataReader import *
 
 
-class BayesClassifier:
+class BayesClassifierBest:
 
    def __init__(self):
       '''This method initializes the Naive Bayes classifier'''
       self.word_counts = {} # Dictionary of dictionaries. Label as first key, word as second key
       self.docs = {} # Label is the key. Total docs / label
       self.word_sums = {} # Label is the key. Total # of words / label
-      self.total_docs = 0
+      self.total_docs = 0 # Number of total documents read
 
    def train(self, dataFile):   
       '''Trains the Naive Bayes Sentiment Classifier.'''
@@ -118,21 +118,40 @@ class BayesClassifier:
       dr = DataReader(dataName)
       correct = 0
       total = 0
+      found_counts = {}
+      actual_counts = {}
       label, data = dr.next()
       log = open(logFilename, 'w')
       while( label,data ):
          try:
+            if label in actual_counts:
+               actual_counts[label] += 1
+            else:
+               actual_counts[label] = 1
+
             total += 1
             string = ""
             for i in data:
                string += i + " "
             bayes_label, bayes_prob = self.classify(string)
-            print "Result:" + bayes_label + " Correct Label: " + label
-            log.write("Result:" + bayes_label + " Correct Label: " + label+ "\n")
+
+            # print "Result:" + bayes_label + " Correct Label: " + label
+            # log.write("Result:" + bayes_label + " Correct Label: " + label+ "\n")
+           
             if bayes_label == label:
+               if bayes_label in found_counts:
+                  found_counts[bayes_label] += 1
+               else:
+                  found_counts[bayes_label] = 1
                correct += 1
             label, data = dr.next()
          except StopIteration:
+            for k, v in actual_counts.items():
+               if k in found_counts:
+                  log.write(k + " " + str(float(found_counts[k])/actual_counts[k]) + "\n")
+               else:
+                  log.write(k + " 0\n")
+
             log.close()
             return float(correct)/total      
 
