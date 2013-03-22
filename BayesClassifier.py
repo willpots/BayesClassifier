@@ -60,8 +60,6 @@ class BayesClassifier:
       words = tokenize(sText)
       probs = {}
 
-
-
       # Calculate probability for each label
       for label, label_words in self.word_counts.items():
          
@@ -76,16 +74,40 @@ class BayesClassifier:
                probs[label] += math.log(.05)
 
       # Now find the maximum probability
-      prob_label, prob_number = "NONE", -1000
+      prob_label, prob_number = "NONE", -10000000
 
       for key, value in probs.items():
          if value > prob_number:
 
             prob_label, prob_number = key, value
 
-      print probs
+      # print "-----------------------------"
+      # print probs
 
       return prob_label, prob_number
+
+   def test(self, dataName, logFilename):
+      ''' Tests against dataName and logs to logFilename. '''
+      dr = DataReader(dataName)
+      correct = 0
+      total = 0
+      label, data = dr.next()
+      log = open(logFilename, 'w')
+      while( label,data ):
+         try:
+            total += 1
+            string = ""
+            for i in data:
+               string += i + " "
+            bayes_label, bayes_prob = self.classify(string)
+            print "Result:" + bayes_label + " Correct Label: " + label
+            log.write("Result:" + bayes_label + " Correct Label: " + label+ "\n")
+            if bayes_label == label:
+               correct += 1
+            label, data = dr.next()
+         except StopIteration:
+            log.close()
+            return float(correct)/total      
 
 
    def save(self, sFilename):
