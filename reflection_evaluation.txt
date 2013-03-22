@@ -3,9 +3,17 @@ Will Potter and Parker Woodworth
 
 1. We choose not to take into account the words that do not occur for a few reasons.  One is for the simple reason of avoiding unnecessary complexity; including these words would require the function to search the dictionary for words that were not included as well as those that were.  Another is that a long dictionary means that the probability of a given label being appropriate will be determined more heavily by what is not in it rather than what is.  For example, if a string to be classified only contains two words and is being classified agaisnt a dictionary with 10,000 words, nearly all of the determined probability will be a result of omission.
 
-2.
+2.Examples:
 
-3. We made two major changes.  One was the switch from bigrams to unigrams, the other was factoring in words entered in all caps.  Our bigram technique was a fairly naive implementation -- it does not look for specific bigrams (such as a modifier-descriptor pair) but rather just pairs bigrams as they appear.  The reason for this type of implementation is largely for efficiency; adding a second dictionary (for example, a dictionary of modifiers) to check against would substantially increase runtime.  The implementation of all caps is based on the assumption that a word emphasized in all caps will be particularly relevant.  For example, a reviewer would be unlikedly to use "LOVED" in a negative review.  The implemenation effectively treats a word written in all caps as having been seen one and a half times in the document.
+"I loved that I hated it" returned positive
+"this is not my favorite" returned positive
+"this isn't the worst thing I've ever seen" returned negative
+
+These three examples use some kind of false negative.  The naive algorithm is very ill equipped to deal with this type of language as it only evaluates individual words.  For examples, the word "favorite" probably has a strong correlation with positive, but the algorithm has no way to recognize its negation in this string.  In the case of "I loved that I hated it," both that string and "I hated that I loved it" return positive, so it is merely by coincidence that one of those words orderes is correct and the other is incorrect.  Again, the algorithm is not intelligent enough to understand where the negation occurs.
+
+
+3. We made two major changes.  One was to add bigram analysis in addition to unigrams, the other was factoring in words entered in all caps.  Our bigram technique was a fairly naive implementation -- it does not look for specific bigrams (such as a modifier-descriptor pair) but rather just pairs bigrams as they appear.  This technique allows us to eliminate probabilities associated with colloqueil phrases and common words as the bigrams are factored in with a negative coefficient.  This makes it so our algorithm will respond more strongly to "best" than "the best."  We chose this implementation over an implementation of an algorithm to eliminate common words to avoid the necessity to compare each word against a dictionary of common words and therefore drastically increase efficiency.  The implementation of all caps is based on the assumption that a word emphasized in all caps will be particularly relevant.  For example, a reviewer would be unlikedly to use "LOVED" in a negative review.  The implemenation effectively treats a word written in all caps as having been seen one and a half times in the document.
+
 
 4. Our improved classifier shows a significant improvement over our pure naive bayse implementation.  Our improved classifier returns about 80% accuracy when training on an arbitrary portion of a data set and classifying the other, whereas our unimproved classifier has only about 40% success under these conditions.
 
