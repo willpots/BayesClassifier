@@ -77,7 +77,7 @@ class BayesClassifier:
       prob_label, prob_number = "NONE", -10000000
 
       for key, value in probs.items():
-         print key, value
+         # print key, value
          if value > prob_number:
 
             prob_label, prob_number = key, value

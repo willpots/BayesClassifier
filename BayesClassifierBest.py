@@ -34,7 +34,7 @@ class BayesClassifier:
             self.total_docs += 1   
 
             for i in range(len(data)/2): #implementing bigrams instead of unigrams
-               j = 2i
+               j = 2*i
                bigram = data[j] + " " + data[j+1]
                if bigram in self.word_counts[label]:
                   self.word_counts[label][bigram] += 1
@@ -86,14 +86,37 @@ class BayesClassifier:
       prob_label, prob_number = "NONE", -1000
 
       for key, value in probs.items():
-         print key, value
+         # print key, value
          if value > prob_number:
 
             prob_label, prob_number = key, value
 
-      print probs
+      # print probs
 
       return prob_label, prob_number
+
+   def test(self, dataName, logFilename):
+      ''' Tests against dataName and logs to logFilename. '''
+      dr = DataReader(dataName)
+      correct = 0
+      total = 0
+      label, data = dr.next()
+      log = open(logFilename, 'w')
+      while( label,data ):
+         try:
+            total += 1
+            string = ""
+            for i in data:
+               string += i + " "
+            bayes_label, bayes_prob = self.classify(string)
+            print "Result:" + bayes_label + " Correct Label: " + label
+            log.write("Result:" + bayes_label + " Correct Label: " + label+ "\n")
+            if bayes_label == label:
+               correct += 1
+            label, data = dr.next()
+         except StopIteration:
+            log.close()
+            return float(correct)/total      
 
 
    def save(self, sFilename):
