@@ -1,5 +1,7 @@
 Assignment 4
 Will Potter and Parker Woodworth
 
-1. We choose not to take into account the words that do not occur for a few reasons.  One is for the simple reason of avoiding unnecessary complexity; including these words would require the function to search the entire diction 
+1. We choose not to take into account the words that do not occur for a few reasons.  One is for the simple reason of avoiding unnecessary complexity; including these words would require the function to search the dictionary for words that were not included as well as those that were.  Another is that a long dictionary means that the probability of a given label being appropriate will be determined more heavily by what is not in it rather than what is.  For example, if a string to be classified only contains two words and is being classified agaisnt a dictionary with 10,000 words, nearly all of the determined probability will be a result of omission.
+
+2.
 
