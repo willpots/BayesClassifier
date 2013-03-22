@@ -5,3 +5,7 @@ Will Potter and Parker Woodworth
 
 2.
 
+3. We made two major changes.  One was the switch from bigrams to unigrams, the other was factoring in words entered in all caps.  Our bigram technique was a fairly naive implementation -- it does not look for specific bigrams (such as a modifier-descriptor pair) but rather just pairs bigrams as they appear.  The reason for this type of implementation is largely for efficiency; adding a second dictionary (for example, a dictionary of modifiers) to check against would substantially increase runtime.  The implementation of all caps is based on the assumption that a word emphasized in all caps will be particularly relevant.  For example, a reviewer would be unlikedly to use "LOVED" in a negative review.  The implemenation effectively treats a word written in all caps as having been seen one and a half times in the document.
+
+4. Our improved classifier shows a significant improvement over our pure naive bayse implementation.  Our improved classifier returns about 80% accuracy when training on an arbitrary portion of a data set and classifying the other, whereas our unimproved classifier has only about 40% success under these conditions.
+

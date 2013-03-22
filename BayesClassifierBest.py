@@ -33,17 +33,25 @@ class BayesClassifier:
                self.docs[label] = 1
             self.total_docs += 1   
 
-            for i in range(len(data)/2): #implementing bigrams instead of unigrams
-               j = 2*i
-               bigram = data[j] + " " + data[j+1]
-               if bigram in self.word_counts[label]:
-                  self.word_counts[label][bigram] += 1
-                  if data[j].isupper():
-                     self.word_counts[label][bigram] += .5 # counts a word an extra half time if it is all caps
-                  if data[j+1].isupper():
-                     self.word_counts[label][bigram] += .5 # counts a word an extra half time if it is all caps
+            # Add counts for individual words
+            for i in range(len(data)):
+               if data[i] in self.word_counts[label]:
+                  self.word_counts[label][data[i]] += 1
                else:
-                  self.word_counts[label][bigram] = 1
+                  self.word_counts[label][data[i]] = 1
+
+            # Add counts for bigrams to the same dictionary
+            # for i in range(len(data)/2): #implementing bigrams instead of unigrams
+            #    j = 2*i
+            #    bigram = data[j] + " " + data[j+1]
+            #    if bigram in self.word_counts[label]:
+            #       self.word_counts[label][bigram] += 1
+            #       if data[j].isupper():
+            #          self.word_counts[label][bigram] += .5 # counts a word an extra half time if it is all caps
+            #       if data[j+1].isupper():
+            #          self.word_counts[label][bigram] += .5 # counts a word an extra half time if it is all caps
+            #    else:
+            #       self.word_counts[label][bigram] = 1
 
             label, data = dr.next()
 
@@ -75,6 +83,14 @@ class BayesClassifier:
          # Calculate label probability
          probs[label] = math.log(float(self.docs[label])/float(self.total_docs)) # Start off with p(label)
 
+         # Check counts for bigrams and calculate probability based off of bigrams
+         # for i in range(len(words)/2): #implementing bigrams instead of unigrams
+         #    j = 2*i
+         #    bigram = words[j] + " " + words[j+1]
+         #    if bigram in self.word_counts[label]:
+         #       probs[label] += math.log(float(self.word_counts[label][bigram]) / float(self.word_sums[label]))
+
+
          # Calculate probability for each word
          for word in words:
             if word in self.word_counts[label]:
@@ -83,10 +99,12 @@ class BayesClassifier:
                probs[label] += math.log(.05)
 
       # Now find the maximum probability
-      prob_label, prob_number = "NONE", -1000
+      prob_label, prob_number = False, False
 
       for key, value in probs.items():
          # print key, value
+         if prob_label == False:
+            prob_label, prob_number = key, value
          if value > prob_number:
 
             prob_label, prob_number = key, value

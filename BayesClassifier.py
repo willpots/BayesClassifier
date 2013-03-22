@@ -74,10 +74,13 @@ class BayesClassifier:
                probs[label] += math.log(.05)
 
       # Now find the maximum probability
-      prob_label, prob_number = "NONE", -10000000
+      prob_label, prob_number = False, False
 
       for key, value in probs.items():
          # print key, value
+         if prob_label == False:
+            prob_label, prob_number = key, value
+
          if value > prob_number:
 
             prob_label, prob_number = key, value
